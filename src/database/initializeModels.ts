@@ -12,10 +12,11 @@ const setupAssociations = (sequelize : Sequelize) => {
     //set up the relationships
 };
 
+
 /**
  * Call this function once in src/index.js to set up a new database
  * @param {Sequelize} sequelize
  */
 const syncTables = async (sequelize : Sequelize) => sequelize.sync();
 
-export default {setupAssociations, syncTables};
+export {setupAssociations, syncTables};
