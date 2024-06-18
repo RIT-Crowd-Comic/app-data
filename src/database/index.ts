@@ -1,7 +1,7 @@
 import { Model, Sequelize } from "sequelize";
 
 import { setupAssociations, syncTables } from "./initializeModels";
-import { modelDefiner } from "./models/types";
+import { modelDefiners } from './models'
 
 /**
  * SSL is required for Heroku Postgres
@@ -26,15 +26,8 @@ const sequelize = new Sequelize(
     }
 );
 
-
-// since most models depend on user, user.model might have to be defined first
-const models : modelDefiner[] = [
-
-];
-
 // actually define each model
-models.forEach(modelDefiner => modelDefiner(sequelize));
- 
+modelDefiners.forEach(modelDefiner => modelDefiner(sequelize));
 
 // additional setup
 setupAssociations(sequelize);
@@ -42,4 +35,4 @@ setupAssociations(sequelize);
 // last step is to make sure tables actually exist
 syncTables(sequelize);
 
-export default sequelize ;
+export default sequelize;
