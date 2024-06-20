@@ -1,6 +1,7 @@
 import { User } from '../models'
 import { hash, compare } from 'bcrypt'
 import PasswordValidator from 'password-validator';
+import { ValidationError } from 'sequelize';
 
 const PASSWORD_SALT_ROUNDS = 10;
 
@@ -11,12 +12,12 @@ const PASSWORD_SALT_ROUNDS = 10;
 
 const passwordSchema = new PasswordValidator();
 passwordSchema
-.is().min(8, 'password should have a minimum of 8 characters')
-.is().max(30, 'password should have a maximum of 30 characters')
-.has().uppercase(1, 'password should have an uppercase character')
-.has().lowercase(1, 'password should have a lowercase character')
-.has(/[\d!@#$%^&*()\-=_+\[\]\{\}]/, 'password should include a number or symbol')
-.has().not().spaces();
+    .is().min(8, 'password should have a minimum of 8 characters')
+    .is().max(30, 'password should have a maximum of 30 characters')
+    .has().uppercase(1, 'password should have an uppercase character')
+    .has().lowercase(1, 'password should have a lowercase character')
+    .has(/[\d!@#$%^&*()\-=_+\[\]\{\}]/, 'password should include a number or symbol')
+    .has().not().spaces();
 
 /**
  * Information required to create a new user
@@ -47,31 +48,28 @@ interface AuthenticateSuccess {
  * @param errorPrefix optionally include a prefix to the validation error messages
  * @returns 
  */
-const validatePassword = (password: string, errorPrefix?: string ): AuthenticateFail | AuthenticateSuccess => {
+const validatePassword = (password: string, errorPrefix?: string): AuthenticateFail | AuthenticateSuccess => {
     const validation = passwordSchema.validate(password, { details: true });
 
     if (validation === false) return {
         success: false,
         message: 'Invalid password'
-    };
+    } as AuthenticateFail;
 
     // validation contains an array of error messages
     if (typeof validation === 'object' && (validation.length ?? -1) > 0) {
         const message = typeof validation === 'object' ? validation.map(o => `${errorPrefix ?? ''} ${o?.message}`) : "Invalid password"
-        return {
-            success: false,
-            message
-        }
+        return { success: false, message } as AuthenticateFail;
     }
 
     // validation contains an empty array or returns true
     // success!
     if (validation === true || typeof validation === 'object' && (validation.length ?? -1) === 0) {
-        return {success: true};
+        return { success: true } as AuthenticateSuccess;
     }
 
     // assume the password doesn't validate
-    return { success: false, message: 'Invalid password' };
+    return { success: false, message: 'Invalid password' } as AuthenticateFail;
 }
 
 /**
@@ -97,13 +95,18 @@ class UserService {
                 password: await hash(newUser.password, PASSWORD_SALT_ROUNDS),
                 email: newUser.email,
             });
-            return { username, display_name, email, success: true };
+            return { username, display_name, email, success: true } as AuthenticateSuccess;
         }
         catch (err) {
+            if (err instanceof ValidationError)
+                return {
+                    success: false,
+                    message: err.message
+                } as AuthenticateFail;
             return {
                 success: false,
-                message: (err as Error).message
-            };
+                message: 'Something went wrong'
+            } as AuthenticateFail;
         }
     }
 
@@ -119,7 +122,7 @@ class UserService {
         if (!user) return {
             success: false,
             message: "Username or password is invalid"
-        };
+        } as AuthenticateFail;
 
         // if there's a match, return the user's information
 
@@ -131,12 +134,12 @@ class UserService {
             email: user.email,
             display_name: user.display_name,
             success: true
-        }
+        } as AuthenticateSuccess;
 
         return {
             success: false,
             message: "Username or password is invalid"
-        };
+        } as AuthenticateFail;
     }
 
     /**
@@ -146,6 +149,14 @@ class UserService {
      * @param newPassword 
      */
     static async changePassword(username: string, currentPassword: string, newPassword: string): Promise<AuthenticateSuccess | AuthenticateFail> {
+
+        // ensure new password is not the same
+        if (currentPassword === newPassword) {
+            return {
+                success: false,
+                message: "New password must not be the same as the old password"
+            } as AuthenticateFail;
+        }
 
         // validate password
         const passwordValidation = validatePassword(newPassword, 'new');
@@ -157,26 +168,68 @@ class UserService {
             return {
                 success: false,
                 message: auth.message
-            };
+            } as AuthenticateFail;
         }
 
         // update the user's password
         const user = await User.findOne({ where: { username } });
         try {
-            await user?.update('password', await hash(newPassword, PASSWORD_SALT_ROUNDS));
+            await user?.update({password: await hash(newPassword, PASSWORD_SALT_ROUNDS)});
 
             return {
                 success: true,
                 message: "Password changed successfully"
-            };
+            } as AuthenticateSuccess;
         }
-        finally {
+        catch {
             return {
                 success: false,
-                message: "Something went wrong"
-            };
+                message: 'Something went wrong'
+            } as AuthenticateFail;
+        }
+        // finally {
+        //     return {
+        //         success: false,
+        //         message: "Something went wrong"
+        //     }  as AuthenticateFail;
+        // }
+    }
+
+    static async changeUsername(username: string, password: string, newUsername: string): Promise<AuthenticateSuccess | AuthenticateFail> {
+
+        // make sure new username is not the same
+        if (username === newUsername) {
+            return {
+                success: false,
+                message: "New username must not be the same as the old username"
+            } as AuthenticateFail;
         }
 
+        // check if current username/password are correct
+        const auth = await this.authenticate(username, password);
+        if (auth.success === false) {
+            return {
+                success: false,
+                message: auth.message
+            } as AuthenticateFail;
+        }
+
+        // update the user's username
+        const user = await User.findOne({ where: { username } });
+        try {
+            await user?.update({username: newUsername});
+
+            return {
+                success: true,
+                message: `Username changed to '${user?.username}'`
+            } as AuthenticateSuccess;
+        }
+        catch {
+            return {
+                success: false,
+                message: 'Something went wrong'
+            } as AuthenticateFail;
+        }
     }
 }
 
