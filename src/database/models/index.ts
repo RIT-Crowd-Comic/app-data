@@ -3,7 +3,7 @@ import {define as panelDefine} from './panel.model'
 
 // add to the list
 export const modelDefiners = [
-   // userDefine,
+    userDefine,
     panelDefine
 ];
 
