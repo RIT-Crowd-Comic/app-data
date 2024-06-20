@@ -1,9 +1,12 @@
+
+
+import dotenv from 'dotenv'
+dotenv.config()
+
 import { Sequelize } from "sequelize";
 import { setupAssociations, syncTables } from "./initializeModels";
 import { User, modelDefiners } from './models'
 import UserService from './services/UserService';
-import dotenv from 'dotenv'; 
-dotenv.config();
 
 /**
  * SSL is required for Heroku Postgres
