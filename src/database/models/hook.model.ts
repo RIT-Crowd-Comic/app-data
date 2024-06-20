@@ -5,9 +5,12 @@ import sequelize from "..";
 
 interface IHook extends Model<InferAttributes<IHook>, InferCreationAttributes<IHook>> {
     id: CreationOptional<INTEGER>,
+    id: CreationOptional<number>,
     position: Float32Array;
     current_panel_id: ForeignKey<INTEGER>,
     next_panel_set_id: ForeignKey<INTEGER>
+    current_panel_id: ForeignKey<number>,
+    next_panel_set_id: ForeignKey<number>
 }
 
 let Hook: ModelStatic<IHook> | undefined;

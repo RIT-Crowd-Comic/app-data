@@ -5,6 +5,8 @@ interface HookConfig {
     position: Float32Array,
     current_panel_id: INTEGER,
     next_panel_set_id: INTEGER
+    current_panel_id: number,
+    next_panel_set_id: number
 }
 
 /**
@@ -27,6 +29,7 @@ class HookService {
     }
 
     static async authenticate(id: INTEGER){
+    static async getHook(id: number){
         // check that requested hook exists
         const hook = await Hook?.findOne({where: {id}, attributes: ['position', 'current_panel_id', 'next_panel_set_id']});
         if(!hook) return undefined

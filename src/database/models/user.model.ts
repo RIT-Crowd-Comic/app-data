@@ -1,5 +1,4 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, ModelStatic, Sequelize } from "sequelize";
-import { sql } from '@sequelize/core'
 
 // alternatively
 // class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -43,7 +42,7 @@ interface IUser extends Model<InferAttributes<IUser>, InferCreationAttributes<IU
 
 // type UserCreationAttributes = Optional<UserAttributes, 'example_attribute'>;
 
-let User: ModelStatic<IUser> | undefined;
+let User: ModelStatic<IUser>;
 
 
 const define = (sequelize: Sequelize): void => {
@@ -52,7 +51,7 @@ const define = (sequelize: Sequelize): void => {
         {
             id: {
                 type: DataTypes.UUID,
-                defaultValue: sql.uuidV4,
+                defaultValue: DataTypes.UUIDV4,
                 primaryKey: true
             },
             username: {
