@@ -1,14 +1,11 @@
-import { AddPrimaryKeyConstraintOptions, CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, ModelStatic, Sequelize } from "sequelize";
-import { sql } from '@sequelize/core'
-import { TimestampAttributes } from "@sequelize/core/_non-semver-use-at-your-own-risk_/model-definition.js";
-import { INTEGER, SMALLINT, TINYINT } from "@sequelize/core/_non-semver-use-at-your-own-risk_/dialects/abstract/data-types.js";
+import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, ModelStatic, Sequelize } from "sequelize";
 
 
 interface IPanel extends Model<InferAttributes<IPanel>, InferCreationAttributes<IPanel>> {
-    id: CreationOptional<INTEGER>,
+    id: CreationOptional<number>,
     image: String,
-    index: SMALLINT,
-    panel_set_id: ForeignKey<INTEGER>
+    index: number,
+    panel_set_id: ForeignKey<number>
 }
 
 
