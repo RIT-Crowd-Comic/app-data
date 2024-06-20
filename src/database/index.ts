@@ -2,6 +2,9 @@ import { Model, Sequelize } from "sequelize";
 
 import { setupAssociations, syncTables } from "./initializeModels";
 import { modelDefiners } from './models'
+import PanelService  from './services/PanelService'
+import dotenv from 'dotenv'; 
+dotenv.config();
 
 /**
  * SSL is required for Heroku Postgres
@@ -33,6 +36,13 @@ modelDefiners.forEach(modelDefiner => modelDefiner(sequelize));
 setupAssociations(sequelize);
 
 // last step is to make sure tables actually exist
-syncTables(sequelize);
+syncTables(sequelize).then(
+    async () => console.log(await PanelService.createPanel(
+        {
+            image: '../../../blah.png', 
+            index: 0, 
+            panel_set_id: 12341234, 
+        }))
+    );
 
 export default sequelize;
