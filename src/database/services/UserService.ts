@@ -3,22 +3,6 @@ import { hash, compare } from 'bcrypt'
 import PasswordValidator from 'password-validator';
 import { ValidationError } from 'sequelize';
 
-const PASSWORD_SALT_ROUNDS = 10;
-
-// /**
-//  * matches at least 1 lowercase, at least 1 uppercase, at least 1 number, at least 1 symbol
-//  */
-// const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()\-=_+\[\]\{\}]).{8,30}$/
-
-const passwordSchema = new PasswordValidator();
-passwordSchema
-    .is().min(8, 'password should have a minimum of 8 characters')
-    .is().max(30, 'password should have a maximum of 30 characters')
-    .has().uppercase(1, 'password should have an uppercase character')
-    .has().lowercase(1, 'password should have a lowercase character')
-    .has(/[\d!@#$%^&*()\-=_+\[\]\{\}]/, 'password should include a number or symbol')
-    .has().not().spaces();
-
 /**
  * Information required to create a new user
  */
@@ -41,6 +25,22 @@ interface AuthenticateSuccess {
     success: boolean,
     [key: string]: any
 }
+
+const PASSWORD_SALT_ROUNDS = 10;
+
+// /**
+//  * matches at least 1 lowercase, at least 1 uppercase, at least 1 number, at least 1 symbol
+//  */
+// const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()\-=_+\[\]\{\}]).{8,30}$/
+
+const passwordSchema = new PasswordValidator();
+passwordSchema
+    .is().min(8, 'password should have a minimum of 8 characters')
+    .is().max(30, 'password should have a maximum of 30 characters')
+    .has().uppercase(1, 'password should have an uppercase character')
+    .has().lowercase(1, 'password should have a lowercase character')
+    .has(/[\d!@#$%^&*()\-=_+\[\]\{\}]/, 'password should include a number or symbol')
+    .has().not().spaces();
 
 /**
  * Checks if a password is valid. On fail, return an error message or message[]
