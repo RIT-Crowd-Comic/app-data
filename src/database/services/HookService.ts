@@ -25,7 +25,7 @@ class HookService {
 
     static async getHook(id: number){
         // check that requested hook exists
-        const hook = await Hook?.findByPk(id);
+        const hook = await Hook?.findOne({where: { id }, attributes: ['position', 'current_panel_id', 'next_panel_set_id']});
         if(!hook) return undefined
 
         //Return the hook's info
