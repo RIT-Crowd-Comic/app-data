@@ -21,12 +21,13 @@ class UserService {
      * @param {} newUser 
      */
     static async createUser(newUser: UserConfig){
-        return User.create({
+        const { username, display_name, email } = await User.create({
             username: newUser.username,
             display_name: newUser.display_name,
             password: await hash(newUser.password, saltRounds),
             email: newUser.email,
         });
+        return { username, display_name, email};
     }
 
     /**
