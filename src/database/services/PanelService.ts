@@ -16,15 +16,13 @@ class PanelService {
      * Create a new Panel}
      * @param {} newPanel
      */
-    static createPanel(newPanel: PanelConfig){
-        return Panel?.create({
+    static async createPanel(newPanel: PanelConfig){
+        const {id, image, index, panel_set_id } = await Panel?.create({
             image: newPanel.image,
             index: newPanel.index,
             panel_set_id: newPanel.panel_set_id,
-        }, 
-        {
-            include: ['image', 'index', 'panel_set_id']
         });
+        return {id, image, index, panel_set_id };
     }
 
     /**
@@ -32,7 +30,7 @@ class PanelService {
      * @param id 
      * @returns 
      */
-    static async authenticate(id: number, username: string,) {
+    static async getPanel(id: number) {
         
         // make sure the panel actually exists
         const panel = await Panel?.findOne({where: { id }, attributes: ['image', 'index', 'panel_set_id']});

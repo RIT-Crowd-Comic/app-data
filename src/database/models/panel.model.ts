@@ -9,7 +9,7 @@ interface IPanel extends Model<InferAttributes<IPanel>, InferCreationAttributes<
 
 
 
-let Panel: ModelStatic<IPanel> | undefined;
+let Panel: ModelStatic<IPanel>;
 
 
 const define = (sequelize: Sequelize): void => {
