@@ -4,12 +4,12 @@ import sequelize from "..";
 
 interface IHook extends Model<InferAttributes<IHook>, InferCreationAttributes<IHook>> {
     id: CreationOptional<number>,
-    position: Float32Array;
+    position: number[];
     current_panel_id: ForeignKey<number>,
     next_panel_set_id: ForeignKey<number>
 }
 
-let Hook: ModelStatic<IHook> | undefined;
+let Hook: ModelStatic<IHook>;
 
 const define = (sequelize: Sequelize): void => {
     Hook = sequelize.define<IHook>(
@@ -22,7 +22,7 @@ const define = (sequelize: Sequelize): void => {
                 allowNull: false
             },
             position: {
-                type: DataTypes.ARRAY(DataTypes.FLOAT),
+                type: DataTypes.ARRAY(DataTypes.NUMBER),
                 allowNull: false
             },
             current_panel_id: {
