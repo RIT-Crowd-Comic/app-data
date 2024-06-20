@@ -21,6 +21,13 @@
       "@/*": ["./src/*"]
     }
   },
+  "ts-node": {
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "CommonJS",
+      "sourceMap": true
+    }
+  },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

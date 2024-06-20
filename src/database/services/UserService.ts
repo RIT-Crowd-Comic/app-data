@@ -21,14 +21,11 @@ class UserService {
      * @param {} newUser 
      */
     static async createUser(newUser: UserConfig){
-        return User?.create({
+        return User.create({
             username: newUser.username,
             display_name: newUser.display_name,
             password: await hash(newUser.password, saltRounds),
             email: newUser.email,
-        }, 
-        {
-            include: ['username', 'display_name', 'email']
         });
     }
 
@@ -40,7 +37,7 @@ class UserService {
      */
     static async authenticate(username: string, password: string) {
         // make sure the user actually exists
-        const user = await User?.findOne({where: { username }, attributes: ['username', 'password', 'email', 'display_name']});
+        const user = await User?.findOne({where: { username: username }, attributes: ['username', 'password', 'email', 'display_name']});
         if (!user) return undefined;
 
         // if there's a match, return the user's information

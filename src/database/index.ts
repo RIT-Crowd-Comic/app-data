@@ -1,7 +1,12 @@
-import { Model, Sequelize } from "sequelize";
 
+
+import dotenv from 'dotenv'
+dotenv.config()
+
+import { Sequelize } from "sequelize";
 import { setupAssociations, syncTables } from "./initializeModels";
-import { modelDefiners } from './models'
+import { User, modelDefiners } from './models'
+import UserService from './services/UserService';
 
 /**
  * SSL is required for Heroku Postgres
@@ -22,7 +27,7 @@ const sequelize = new Sequelize(
             min:     0,
             acquire: 30000,
             idle:    10000
-        }
+        },
     }
 );
 
