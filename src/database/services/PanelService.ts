@@ -6,25 +6,6 @@ interface PanelConfig {
     panel_set_id: number,
 }
 
-interface PanelInfoCreate {
-    id: number,
-    image: string,
-    index: number,
-    panel_set_id: number
-}
-
-interface PanelInfoGet {
-    image: string,
-    index: number,
-    panel_set_id: number
-}
-
-interface MultiplePanelInfoGet {
-    id: number,
-    image: string,
-    index: number
-}
-
 /**
  * Perform queries on the 'Panels' table
  */
@@ -41,7 +22,12 @@ class PanelService {
             index: newPanel.index,
             panel_set_id: newPanel.panel_set_id,
         });
-        return {id, image, index, panel_set_id } as PanelInfoCreate;
+        return {id, image, index, panel_set_id } as {
+            id: number,
+            image: string,
+            index: number,
+            panel_set_id: number
+        };
     }
 
     /**
@@ -61,8 +47,8 @@ class PanelService {
         return {
             image: panel.image,
             index: panel.index,
-            panel_set_id: panel.panel_set_id
-        } as PanelInfoGet
+            panel_set_id: panel.panel_set_id as number
+        }
     }
 
     /**
@@ -77,13 +63,13 @@ class PanelService {
         
         //Map panels to keep only needed data
         const parsedPanels = panels.map((p) => ({
-            id: p.id, 
+            id: p.id as number, 
             image: p.image, 
             index: p.index
           }))
        
         //Return the array of panels
-        return parsedPanels as MultiplePanelInfoGet[];
+        return parsedPanels;
     }
 }
 
