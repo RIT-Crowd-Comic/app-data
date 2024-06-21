@@ -22,7 +22,7 @@ const define = (sequelize: Sequelize): void => {
                 allowNull: false
             },
             position: {
-                type: DataTypes.ARRAY(DataTypes.NUMBER),
+                type: DataTypes.ARRAY(DataTypes.FLOAT),
                 allowNull: false
             },
             current_panel_id: {
