@@ -16,7 +16,7 @@ class HookService {
      * @returns {object} with position, current_panel_id, and next_panel_id properties
      */
     static async createHook(newHook: HookConfig){
-        const {position, current_panel_id, next_panel_set_id} = await Hook?.create({
+        const {position, current_panel_id, next_panel_set_id} = await Hook.create({
             position: newHook.position,
             current_panel_id: newHook.current_panel_id,
             next_panel_set_id: newHook.next_panel_set_id
@@ -31,7 +31,7 @@ class HookService {
      */
     static async getHook(id: number){
         // check that requested hook exists
-        const hook = await Hook?.findOne({where: { id }, attributes: ['position', 'current_panel_id', 'next_panel_set_id']});
+        const hook = await Hook.findOne({where: { id }, attributes: ['position', 'current_panel_id', 'next_panel_set_id']});
         if(!hook) return undefined
 
         //Return the hook's info
@@ -49,7 +49,7 @@ class HookService {
      */
     static async getPanelHooks(panel_id: number){
         // Find all hooks on requested panel 
-        const hooks = await Hook?.findAll({where: {current_panel_id: panel_id}});
+        const hooks = await Hook.findAll({where: {current_panel_id: panel_id}});
         if(!(hooks?.length>0)) return undefined
         
         //Parse hooks into usable objects
