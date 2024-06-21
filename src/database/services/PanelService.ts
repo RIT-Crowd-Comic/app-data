@@ -6,6 +6,18 @@ interface PanelConfig {
     panel_set_id: number,
 }
 
+interface PanelInfoCreate {
+    id: number,
+    image: string,
+    index: number,
+    panel_set_id: number
+}
+
+interface PanelInfoGet {
+    image: string,
+    index: number,
+    panel_set_id: number
+}
 
 /**
  * Perform queries on the 'Panels' table
@@ -13,8 +25,9 @@ interface PanelConfig {
 class PanelService {
 
     /**
-     * Create a new Panel}
+     * Create a new Panel
      * @param {} newPanel
+     * returns PanelInfo
      */
     static async createPanel(newPanel: PanelConfig){
         const {id, image, index, panel_set_id } = await Panel?.create({
@@ -22,7 +35,7 @@ class PanelService {
             index: newPanel.index,
             panel_set_id: newPanel.panel_set_id,
         });
-        return {id, image, index, panel_set_id };
+        return {id, image, index, panel_set_id } as PanelInfoCreate;
     }
 
     /**
@@ -40,7 +53,7 @@ class PanelService {
             image: panel.image,
             index: panel.index,
             panel_set_id: panel.panel_set_id
-        }
+        } as PanelInfoGet
     }
 }
 
