@@ -7,6 +7,7 @@ import { Sequelize } from "sequelize";
 import { setupAssociations, syncTables } from "./initializeModels";
 import { User, modelDefiners } from './models'
 import UserService from './services/UserService';
+import { PanelSet } from './models/panelSet.model';
 
 /**
  * SSL is required for Heroku Postgres
@@ -38,6 +39,9 @@ modelDefiners.forEach(modelDefiner => modelDefiner(sequelize));
 setupAssociations(sequelize);
 
 // last step is to make sure tables actually exist
-syncTables(sequelize);
+syncTables(sequelize).then(
+    async () => {
+        await PanelSet.create({ author_id: "ID" });
+    } );
 
 export default sequelize;

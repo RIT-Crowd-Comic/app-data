@@ -5,11 +5,11 @@ import { AllowNull, ForeignKey, PrimaryKey } from "sequelize-typescript";
 
 
 interface IPanelSet extends Model<InferAttributes<IPanelSet>, InferCreationAttributes<IPanelSet>> {
-    id: number,
+    id: CreationOptional<number>,
     author_id: string
 }
 
-let PanelSet: ModelStatic<IPanelSet> | undefined;
+let PanelSet: ModelStatic<IPanelSet>;
 const define = (sequelize: Sequelize): void => {
     PanelSet = sequelize.define<IPanelSet>(
         'panel_set',
