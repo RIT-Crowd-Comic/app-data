@@ -36,7 +36,7 @@ class PanelService {
      * @returns {} PanelInfoCreate
      */
     static async createPanel(newPanel: PanelConfig){
-        const {id, image, index, panel_set_id } = await Panel?.create({
+        const {id, image, index, panel_set_id } = await Panel.create({
             image: newPanel.image,
             index: newPanel.index,
             panel_set_id: newPanel.panel_set_id,
@@ -52,7 +52,7 @@ class PanelService {
     static async getPanel(id: number) {
         
         // make sure the panel actually exists
-        const panel = await Panel?.findOne({where: { id }, attributes: ['image', 'index', 'panel_set_id']});
+        const panel = await Panel.findOne({where: { id }, attributes: ['image', 'index', 'panel_set_id']});
         if (!panel) return undefined;
 
         return {
@@ -70,10 +70,14 @@ class PanelService {
     static async getPanelsFromPanelSetID(panel_set_id: number){
         // Find all panels on requested panelSet 
         const panels = await Panel.findAll({where: {panel_set_id}});
-        if(!(panels?.length>0)) return undefined
+        if(!(panels?.length>0)) return [];
         
         //Map panels to keep only needed data
-        const parsedPanels = panels.map((p)=>{return{id: p.id, image: p.image, index: p.index}});
+        const parsedPanels = panels.map((p) => ({
+            id: p.id, 
+            image: p.image, 
+            index: p.index
+          }))
        
         //Return the array of panels
         return parsedPanels as MultiplePanelInfo[];
