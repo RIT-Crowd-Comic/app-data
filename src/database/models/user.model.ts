@@ -60,7 +60,7 @@ const define = (sequelize: Sequelize): void => {
                 unique: true,
                 validate: {
                     // username can contain any of the following characters, with length 8-20
-                    is: /^[a-zA-Z0-9!@#$%^&*()\-=_+\[\]\{\}]{8,30}$/
+                    is: /^[a-zA-Z0-9!@#$%^&*()\-=_+[\]{}]{8,30}$/
                 }
             },
             display_name: {

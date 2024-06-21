@@ -1,4 +1,4 @@
-import { User } from '../models'
+import { IUser, User } from '../models'
 import { hash, compare } from 'bcrypt'
 import PasswordValidator from 'password-validator';
 import { ValidationError } from 'sequelize';
@@ -39,7 +39,7 @@ passwordSchema
     .is().max(30, 'password should have a maximum of 30 characters')
     .has().uppercase(1, 'password should have an uppercase character')
     .has().lowercase(1, 'password should have a lowercase character')
-    .has(/[\d!@#$%^&*()\-=_+\[\]\{\}]/, 'password should include a number or symbol')
+    .has(/[\d!@#$%^&*()\-=_+[\]{}]/, 'password should include a number or symbol')
     .has().not().spaces();
 
 /**
@@ -174,7 +174,7 @@ class UserService {
         // update the user's password
         const user = await User.findOne({ where: { username } });
         try {
-            await user?.update({password: await hash(newPassword, PASSWORD_SALT_ROUNDS)});
+            await user?.update({ password: await hash(newPassword, PASSWORD_SALT_ROUNDS) });
 
             return {
                 success: true,
@@ -195,6 +195,13 @@ class UserService {
         // }
     }
 
+    /**
+     * Change a user's username
+     * @param username 
+     * @param password 
+     * @param newUsername 
+     * @returns 
+     */
     static async changeUsername(username: string, password: string, newUsername: string): Promise<AuthenticateSuccess | AuthenticateFail> {
 
         // make sure new username is not the same
@@ -217,7 +224,7 @@ class UserService {
         // update the user's username
         const user = await User.findOne({ where: { username } });
         try {
-            await user?.update({username: newUsername});
+            await user?.update({ username: newUsername });
 
             return {
                 success: true,
@@ -230,6 +237,27 @@ class UserService {
                 message: 'Something went wrong'
             } as AuthenticateFail;
         }
+    }
+
+    /**
+     * Get the entire row of a user from their username (excluding password). 
+     * This should only be used internally, as it doesn't require authentication.
+     * @param username 
+     * @returns 
+     */
+    static async getUserRow(username: string): Promise<IUser | null> {
+        return await User.findOne({
+            where: { username: username },
+            
+            attributes: [
+                'id', 
+                'username',
+                'email', 
+                'display_name', 
+                'created_at', 
+                'updated_at'
+            ]
+        });
     }
 }
 
