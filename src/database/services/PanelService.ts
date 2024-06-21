@@ -19,6 +19,12 @@ interface PanelInfoGet {
     panel_set_id: number
 }
 
+interface MultiplePanelInfo {
+    id: number,
+    image: string,
+    index: number
+}
+
 /**
  * Perform queries on the 'Panels' table
  */
@@ -54,6 +60,23 @@ class PanelService {
             index: panel.index,
             panel_set_id: panel.panel_set_id
         } as PanelInfoGet
+    }
+
+    /**
+     * Get all panels that are associated with a specific panelSet
+     * @param {number} panel_set_id ID of panelSet
+     * @returns {object[]} An array of objects with id, image, index properties
+     */
+    static async getPanelsFromPanelSetID(panel_set_id: number){
+        // Find all panels on requested panelSet 
+        const panels = await Panel?.findAll({where: {panel_set_id: panel_set_id}});
+        if(!(panels?.length>0)) return undefined
+        
+        //Map panels to keep only needed data
+        const parsedPanels = panels.map((p)=>{return{id: p.id, image: p.image, index: p.index}});
+       
+        //Return the array of panels
+        return parsedPanels as MultiplePanelInfo[];
     }
 }
 
