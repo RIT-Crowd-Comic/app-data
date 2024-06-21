@@ -1,8 +1,9 @@
+import { Sequelize } from "sequelize";
 import { PanelSet } from "../models/panelSet.model";
 import { User } from "../models/user.model";
 
 interface PanelSetConfig {
-    author_id: string
+    username: string
 }
 
 class PanelSetService {
@@ -11,8 +12,12 @@ class PanelSetService {
      * @param {} panelSet 
      */
     static async createPanelSet(panelSet: PanelSetConfig) {
+        // get id from username
+        const user = await User.findOne({ where: {username: panelSet.username } });
+        if (user == null) return undefined;
+
         const { author_id } = await PanelSet.create({
-            author_id: panelSet.author_id
+            author_id: user.id
         });
 
         return { author_id };
@@ -26,10 +31,17 @@ class PanelSetService {
         return await PanelSet.findByPk(id);
     }
 
-    // //todo: get all of the panels the author created
-    // static async getAllPanelFromUser(userId: string) {
-
-    // }
+    /**
+     * Get all of the panels a specific author created
+     * @param {} username author's username
+     * @returns an array of all the panels found
+     */
+    static async getAllPanelSetFromUser(username: string) {
+        return await User.findAll({
+            where: { username },
+            include: { model: PanelSet },
+        });
+    }
 }
 
 export default PanelSetService;

@@ -41,9 +41,10 @@ setupAssociations(sequelize);
 // last step is to make sure tables actually exist
 syncTables(sequelize, true).then(
     async () => { 
-        //  await UserService.createUser({username: "username",password: "password", email: "email@yahoo.com", display_name: "display_name"});
-         await PanelSetService.createPanelSet({ author_id: "e90da25c-cd92-4a96-88f8-2f38f9db7417" });
-         await PanelSetService.createPanelSet({ author_id: "60947541-83de-4a4e-882e-cc5c09528487" });
+         await UserService.createUser({username: "username",password: "Password!", email: "email@yahoo.com", display_name: "display_name"});
+         await PanelSetService.createPanelSet({ username: "username" })
+         await PanelSetService.createPanelSet({ username: "username" })
+         console.log((await PanelSetService.getAllPanelSetFromUser("username")).length)
     } );
 
 export default sequelize;
