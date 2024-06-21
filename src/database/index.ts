@@ -35,6 +35,6 @@ modelDefiners.forEach(modelDefiner => modelDefiner(sequelize));
 setupAssociations(sequelize);
 
 // last step is to make sure tables actually exist
-syncTables(sequelize)
+syncTables(sequelize);
 
 export default sequelize;

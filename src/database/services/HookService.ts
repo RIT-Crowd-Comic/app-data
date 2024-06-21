@@ -53,14 +53,7 @@ class HookService {
         if(!(hooks?.length>0)) return undefined
         
         //Parse hooks into usable objects
-        const parsedHooks = [];
-        for(let i=0, size=hooks.length; i<size; i++){
-            parsedHooks.push({
-                position: hooks[i].position,
-                current_panel_id: hooks[i].current_panel_id,
-                next_panel_set_id: hooks[i].next_panel_set_id
-            });
-        }
+        const parsedHooks = hooks.map((x)=>{return{position: x.position, current_panel_id: x.current_panel_id, next_panel_set_id: x.next_panel_set_id}});
         //Return the array of hooks
         return parsedHooks;
     }
