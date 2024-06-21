@@ -69,7 +69,7 @@ class PanelService {
      */
     static async getPanelsFromPanelSetID(panel_set_id: number){
         // Find all panels on requested panelSet 
-        const panels = await Panel?.findAll({where: {panel_set_id: panel_set_id}});
+        const panels = await Panel.findAll({where: {panel_set_id}});
         if(!(panels?.length>0)) return undefined
         
         //Map panels to keep only needed data
