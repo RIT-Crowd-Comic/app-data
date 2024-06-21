@@ -12,7 +12,8 @@ interface HookConfig {
 class HookService {
     /**
      * Create a new hook
-     * @param {} newHook
+     * @param {HookConfig} newHook
+     * @returns {object} with position, current_panel_id, and next_panel_id properties
      */
     static async createHook(newHook: HookConfig){
         const {position, current_panel_id, next_panel_set_id} = await Hook?.create({
@@ -23,6 +24,11 @@ class HookService {
         return {position, current_panel_id, next_panel_set_id};
     }
 
+    /**
+     * Gets a single hook based on id
+     * @param {number} id Hook id
+     * @returns {object} with position, current_panel_id, and next_panel_id properties from the hook
+     */
     static async getHook(id: number){
         // check that requested hook exists
         const hook = await Hook?.findOne({where: { id }, attributes: ['position', 'current_panel_id', 'next_panel_set_id']});
@@ -36,6 +42,11 @@ class HookService {
         }
     }
 
+    /**
+     * Get all hooks that are associated with a specific panel
+     * @param {number} panel_id ID of target panel
+     * @returns {object[]} where array is composed of objects with position, current_panel_id, and next_panel_id properties
+     */
     static async getPanelHooks(panel_id: number){
         // Find all hooks on requested panel 
         const hooks = await Hook?.findAll({where: {current_panel_id: panel_id}});
