@@ -16,8 +16,8 @@ const define = (sequelize: Sequelize): void => {
         {
             id: {
                 type: DataTypes.INTEGER,
-                defaultValue: 0,
-                primaryKey: true
+                primaryKey: true,
+                autoIncrement: true
             },
             author_id: {
                 type: DataTypes.UUID,

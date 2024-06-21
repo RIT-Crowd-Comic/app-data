@@ -39,10 +39,11 @@ modelDefiners.forEach(modelDefiner => modelDefiner(sequelize));
 setupAssociations(sequelize);
 
 // last step is to make sure tables actually exist
-syncTables(sequelize).then(
-    async () => {
-        UserService.createUser({username: "username",password: "password", email: "email@yahoo.com", display_name: "display_name"})
-         PanelSetService.createPanelSet({ author_id: "e90da25c-cd92-4a96-88f8-2f38f9db7417" });
+syncTables(sequelize, true).then(
+    async () => { 
+        //  await UserService.createUser({username: "username",password: "password", email: "email@yahoo.com", display_name: "display_name"});
+         await PanelSetService.createPanelSet({ author_id: "e90da25c-cd92-4a96-88f8-2f38f9db7417" });
+         await PanelSetService.createPanelSet({ author_id: "60947541-83de-4a4e-882e-cc5c09528487" });
     } );
 
 export default sequelize;
