@@ -5,9 +5,9 @@ dotenv.config()
 
 import { Sequelize } from "sequelize";
 import { setupAssociations, syncTables } from "./initializeModels";
-import { User, modelDefiners } from './models'
+import { modelDefiners } from './models'
+import PanelSetService from './services/PanelSetService';
 import UserService from './services/UserService';
-import { PanelSet } from './models/panelSet.model';
 
 /**
  * SSL is required for Heroku Postgres
@@ -41,7 +41,8 @@ setupAssociations(sequelize);
 // last step is to make sure tables actually exist
 syncTables(sequelize).then(
     async () => {
-        await PanelSet.create({ author_id: "ID" });
+        UserService.createUser({username: "username",password: "password", email: "email@yahoo.com", display_name: "display_name"})
+         PanelSetService.createPanelSet({ author_id: "e90da25c-cd92-4a96-88f8-2f38f9db7417" });
     } );
 
 export default sequelize;
