@@ -239,26 +239,26 @@ class UserService {
         }
     }
 
-    /**
-     * Get the entire row of a user from their username (excluding password). 
-     * This should only be used internally, as it doesn't require authentication.
-     * @param username 
-     * @returns 
-     */
-    static async getUserRow(username: string): Promise<IUser | null> {
-        return await User.findOne({
-            where: { username: username },
+    // /**
+    //  * Get the entire row of a user from their username (excluding password). 
+    //  * This should only be used internally, as it doesn't require authentication.
+    //  * @param username 
+    //  * @returns 
+    //  */
+    // static async getUserRow(username: string): Promise<IUser | null> {
+    //     return await User.findOne({
+    //         where: { username: username },
             
-            attributes: [
-                'id', 
-                'username',
-                'email', 
-                'display_name', 
-                'created_at', 
-                'updated_at'
-            ]
-        });
-    }
+    //         attributes: [
+    //             'id', 
+    //             'username',
+    //             'email', 
+    //             'display_name', 
+    //             'created_at', 
+    //             'updated_at'
+    //         ]
+    //     });
+    // }
 }
 
 export default UserService;
