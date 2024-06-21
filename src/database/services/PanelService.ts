@@ -27,7 +27,7 @@ class PanelService {
     /**
      * Create a new Panel
      * @param {} newPanel
-     * returns PanelInfo
+     * @returns {} PanelInfoCreate
      */
     static async createPanel(newPanel: PanelConfig){
         const {id, image, index, panel_set_id } = await Panel?.create({
@@ -41,7 +41,7 @@ class PanelService {
     /**
      * Authenticate a panel before retrieve the panel's data
      * @param id 
-     * @returns 
+     * @returns PanelInfoGet
      */
     static async getPanel(id: number) {
         
