@@ -19,7 +19,7 @@ interface PanelInfoGet {
     panel_set_id: number
 }
 
-interface MultiplePanelInfo {
+interface MultiplePanelInfoGet {
     id: number,
     image: string,
     index: number
@@ -52,7 +52,10 @@ class PanelService {
     static async getPanel(id: number) {
         
         // make sure the panel actually exists
-        const panel = await Panel.findOne({where: { id }, attributes: ['image', 'index', 'panel_set_id']});
+        const panel = await Panel.findOne({
+            where: { id }, 
+            attributes: ['image', 'index', 'panel_set_id']});
+        
         if (!panel) return undefined;
 
         return {
@@ -80,7 +83,7 @@ class PanelService {
           }))
        
         //Return the array of panels
-        return parsedPanels as MultiplePanelInfo[];
+        return parsedPanels as MultiplePanelInfoGet[];
     }
 }
 
