@@ -3,7 +3,9 @@ dotenv.config()
 
 import { Sequelize } from "sequelize";
 import { setupAssociations, syncTables } from "./initializeModels";
-import { modelDefiners } from './models';
+import { modelDefiners } from './models'
+import PanelSetService from './services/PanelSetService';
+import UserService from './services/UserService';
 
 /**
  * SSL is required for Heroku Postgres
@@ -35,6 +37,8 @@ modelDefiners.forEach(modelDefiner => modelDefiner(sequelize));
 setupAssociations(sequelize);
 
 // last step is to make sure tables actually exist
-syncTables(sequelize);
+syncTables(sequelize, true).then(
+    async () => { 
+    } );
 
 export default sequelize;
