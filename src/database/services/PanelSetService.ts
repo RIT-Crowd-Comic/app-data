@@ -3,7 +3,7 @@ import { PanelSet } from "../models/panelSet.model";
 import { User } from "../models/user.model";
 
 interface PanelSetConfig {
-    username: string
+    author_id: string
 }
 
 class PanelSetService {
@@ -12,15 +12,10 @@ class PanelSetService {
      * @param {} panelSet 
      */
     static async createPanelSet(panelSet: PanelSetConfig) {
-        // get id from username
-        const user = await User.findOne({ where: {username: panelSet.username } });
-        if (user == null) return undefined;
-
         const { author_id } = await PanelSet.create({
-            author_id: user.id
+            author_id: panelSet.author_id
         });
-
-        return { author_id };
+        return {author_id}
     }
     /**
      * Gets a panel set based on the id
@@ -30,18 +25,16 @@ class PanelSetService {
     static async getPanelSetByID(id: number) {
         return await PanelSet.findByPk(id);
     }
-
-    // ! This can be rewritten with inner joins, but unsure how without getting user information in the results
     /**
      * Get all of the panels a specific author created
-     * @param {} username author's username
+     * @param {} id the author's UUID
      * @returns an array of all the panels found
      */
-    static async getAllPanelSetFromUser(username: string) {
-         const user = await User.findOne({ where: {username: username } });
-         const id = user?.id;
-        const panel_sets = await PanelSet.findAll({ where: {author_id: id } });
-        return panel_sets;
+    static async getAllPanelSetFromUser(id: string) {
+        const panelSets = await PanelSet.findAll({
+            where: {author_id: id}
+     });
+        return panelSets;
     }
 }
 

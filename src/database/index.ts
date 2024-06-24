@@ -39,7 +39,6 @@ setupAssociations(sequelize);
 // last step is to make sure tables actually exist
 syncTables(sequelize, true).then(
     async () => { 
-        
     } );
 
 export default sequelize;
