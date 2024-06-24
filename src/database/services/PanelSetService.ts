@@ -31,16 +31,17 @@ class PanelSetService {
         return await PanelSet.findByPk(id);
     }
 
+    // ! This can be rewritten with inner joins, but unsure how without getting user information in the results
     /**
      * Get all of the panels a specific author created
      * @param {} username author's username
      * @returns an array of all the panels found
      */
     static async getAllPanelSetFromUser(username: string) {
-        return await User.findAll({
-            where: { username },
-            include: { model: PanelSet },
-        });
+         const user = await User.findOne({ where: {username: username } });
+         const id = user?.id;
+        const panel_sets = await PanelSet.findAll({ where: {author_id: id } });
+        return panel_sets;
     }
 }
 
